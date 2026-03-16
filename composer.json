@@ -21,11 +21,11 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4.1"
+        "silverstripe/framework": "^6.1"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.0",
-        "phpunit/phpunit": "^5.7"
+        "squizlabs/php_codesniffer": "^4.0",
+        "phpunit/phpunit": "^13.0"
     },
     "scripts": {
         "phpcbf": "phpcbf src/ tests/",
