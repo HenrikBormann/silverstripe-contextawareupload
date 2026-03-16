@@ -2,10 +2,7 @@
 
 namespace Symbiote\ContextAwareUpload\Tests;
 
-use Page;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\Control\Director;
 use SilverStripe\Assets\Folder;
 use Symbiote\Multisites\Model\Site;
 
@@ -19,7 +16,7 @@ class UploadMultisitesTest extends FunctionalTest
 
     protected $usesDatabase = true;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         // NOTE(Jake): 2018-08-09
@@ -43,7 +40,7 @@ class UploadMultisitesTest extends FunctionalTest
         $parentRecord->write();
         $parentRecord->doPublish();
 
-        $record = new PageWithUploadField();
+        $record = PageWithUploadField::create();
         $record->Title = 'Test Page';
         $record->SiteID = $parentRecord->ID;
         $record->ParentID = $parentRecord->ID;

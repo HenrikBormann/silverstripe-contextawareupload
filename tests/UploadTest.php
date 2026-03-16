@@ -2,15 +2,13 @@
 
 namespace Symbiote\ContextAwareUpload\Tests;
 
-use Page;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Assets\Upload_Validator;
-use Silverstripe\Assets\Dev\TestAssetStore;
+use SilverStripe\Assets\Dev\TestAssetStore;
 use SilverStripe\Security\SecurityToken;
 use Symbiote\ContextAwareUpload\ForceRootToDefaultExtension;
 
@@ -29,7 +27,7 @@ class UploadTest extends FunctionalTest
      */
     private $session = null;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +45,7 @@ class UploadTest extends FunctionalTest
         Upload_Validator::config()->set('use_is_uploaded_file', false);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         TestAssetStore::reset();
         parent::tearDown();
@@ -56,12 +54,12 @@ class UploadTest extends FunctionalTest
     public function testCreationOfFolder()
     {
         //
-        $parentRecord = new PageWithUploadField();
+        $parentRecord = PageWithUploadField::create();
         $parentRecord->Title = 'Top Level';
         $parentRecord->write();
         $parentRecord->doPublish();
 
-        $record = new PageWithUploadField();
+        $record = PageWithUploadField::create();
         $record->Title = 'Test Page';
         $record->ParentID = $parentRecord->ID;
         $record->write();
@@ -88,10 +86,11 @@ class UploadTest extends FunctionalTest
     {
         File::add_extension(ForceRootToDefaultExtension::class);
 
-        $record = new PageWithUploadField();
+        $record = PageWithUploadField::create();
         $record->Title = 'Test Empty Page';
         $record->write();
         $record->doPublish();
+
         $pageID = $record->ID;
 
         // NOTE(Jake): 2018-08-22
@@ -110,7 +109,7 @@ class UploadTest extends FunctionalTest
         $this->assertFalse($response->isError());
 
         // Upload file
-        $fileData = array('Upload' => $this->getUploadFile('Upload', 'testItCreatesFile.txt'));
+        $fileData = ['Upload' => $this->getUploadFile('Upload', 'testItCreatesFile.txt')];
         $_FILES = $fileData;
         $postedData = array_merge(
             $fileData,
@@ -146,14 +145,15 @@ class UploadTest extends FunctionalTest
         for ($i = 0; $i < 10000; $i++) {
             $tmpFileContent .= '0';
         }
+
         file_put_contents($tmpFilePath, $tmpFileContent);
         // emulates the $_FILES array
-        return array(
+        return [
             'name' => $tmpFileName,
             'type' => 'text/plaintext',
             'size' => filesize($tmpFilePath),
             'tmp_name' => $tmpFilePath,
             'error' => UPLOAD_ERR_OK,
-        );
+        ];
     }
 }

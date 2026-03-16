@@ -3,10 +3,8 @@
 namespace Symbiote\ContextAwareUpload;
 
 use SilverStripe\Assets\Upload;
-use SilverStripe\CMS\Model\Page;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\CMS\Model\SiteTree;
-use Symbiote\Multisites\Model\Site;
 
 class ContextAwareUploadService
 {
@@ -51,11 +49,14 @@ class ContextAwareUploadService
             if (!$urlSegment) {
                 return '';
             }
+
             if ($i != 0) {
                 $folderPath .= '/';
             }
+
             $folderPath .= $urlSegment;
         }
+
         return $folderPath;
     }
 }
